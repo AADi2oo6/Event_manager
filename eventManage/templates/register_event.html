@@ -1,0 +1,52 @@
+<!-- events/templates/events/register_event.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Register for events easily using this form.">
+    <title>Register Event</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Register for Event</h2>
+
+        <!-- Error messages section -->
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Form -->
+        <form method="POST" action="{% url 'register_event' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Event Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Event Date:</label>
+                <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Event Description:</label>
+                <textarea class="form-control" id="description" name="description" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Register Event</button>
+        </form>
+
+        <!-- Navigation -->
+        <nav class="mt-4">
+            <a href="{% url 'event_calendar' %}" class="btn btn-secondary" role="button">Back to Calendar</a>
+        </nav>
+    </div>
+</body>
+</html>

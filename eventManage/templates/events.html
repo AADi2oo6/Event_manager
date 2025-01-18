@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events - 2025</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Upcoming Events in 2025</h2>
+
+        <ul class="list-group">
+            {% for event in events %}
+            <li class="list-group-item">
+                <strong>{{ event.name }}</strong> - {{ event.date }}
+                <a href="{% url 'register_event' event.id %}" class="btn btn-info btn-sm float-right ml-2">Register</a>
+                <a href="{% url 'ticket_booking' event.id %}" class="btn btn-primary btn-sm float-right">Book Tickets</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

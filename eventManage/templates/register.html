@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Event Registration</h2>
+        <p>Register for an event below.</p>
+
+        <!-- Event Registration Form -->
+        <form method="post">
+            
+            <div class="form-group">
+                <label for="event">Select Event:</label>
+                <select name="event" id="event" class="form-control">
+                    {% for event in events %}
+                        <option value="{{ event.id }}">Vishwakarandak - 10th january</option>
+                    {% empty %}
+                        <option disabled>No events available to register</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+        </form>
+        
+        <!-- Buttons in the same line -->
+        <div class="d-flex justify-content-start">
+            <a href="register_success.html" class="btn btn-primary mr-2">Register</a>
+            <a href="home.html" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
+

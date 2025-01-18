@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Booking</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        function updateTicketFields() {
+            const ticketCount = document.getElementById('tickets').value;
+            const ticketDetailsContainer = document.getElementById('ticket-details-container');
+            ticketDetailsContainer.innerHTML = ''; // Clear previous entries
+
+            for (let i = 0; i < ticketCount; i++) {
+                const ticketInfoDiv = document.createElement('div');
+                ticketInfoDiv.classList.add('ticket-info', 'mt-3');
+
+                ticketInfoDiv.innerHTML = `
+                    <h5>Ticket ${i + 1}</h5>
+                    <div class="form-group">
+                        <label for="name${i}">Name:</label>
+                        <input type="text" class="form-control" id="name${i}" name="name${i}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email${i}">Email:</label>
+                        <input type="email" class="form-control" id="email${i}" name="email${i}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone${i}">Phone Number:</label>
+                        <input type="tel" class="form-control" id="phone${i}" name="phone${i}" required>
+                    </div>
+                `;
+                ticketDetailsContainer.appendChild(ticketInfoDiv);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Book Tickets for Event</h2>
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="event">Select Event:</label>
+                <select class="form-control" id="event" name="event" required>
+                    {% for i in event %}
+                        <option value="{{ i.name }}">{{ i.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tickets">Number of Tickets:</label>
+                <input type="number" class="form-control" id="tickets" name="tickets" min="1" required onchange="updateTicketFields()">
+            </div>
+
+            <div id="ticket-details-container"></div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary mt-4">Book Tickets</button>
+        </form>
+
+        <!-- Back to events link -->
+        <a href="{% url 'events_list' %}" class="btn btn-secondary mt-4">Back to Events</a>
+    </div>
+</body>
+</html>
