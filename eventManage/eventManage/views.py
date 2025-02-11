@@ -4,12 +4,18 @@ from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
 from userlongin.models import login
+from django.utils import timezone
 from services.models import Event, Ticket, volunteer # Assuming you have an Event and Ticket model
+
+from django.core.mail import send_mail
+
+
 user = "admin"
 def index(reqeust):
     return render(reqeust,'index.html')
 
 def ulogin(request):
+
     udata = login.objects.all()
     users = {
 
@@ -54,7 +60,7 @@ def register_event(request):
         description = request.POST['description']
 
         # Save the event to the database
-        Event.objects.create(name=name, date=date, description=description)
+        Event.objects.create(name=name,host = user, date=date, description=description)
 
         return redirect('/calendar/')  # Redirect after saving
     
@@ -62,7 +68,8 @@ def register_event(request):
 
 def event_calendar(request):
     # You may want to pass actual events data here
-    events = Event.objects.all()
+    events = Event.objects.all().order_by('date')
+
     return render(request, 'event_calendar.html', {'events': events})
 
 def events_list(request):
@@ -80,13 +87,27 @@ def register(request):
     return render(request, 'register.html')
 
 def schedule(request):
-    events = Event.objects.all().order_by('date')
+    current_date = timezone.now().date()
+    events = Event.objects.filter(date__gt=current_date).order_by('date')
     return render(request, 'events_list.html', {'events': events})
-    # return render(request, 'events_list.html')
 
 def ticket_booking_success(request,name):
     event_data = Ticket.objects.get(name=name)
-
+    send_mail(
+        f"Your Ticket For the Event {event_data.event}",
+        f"Dear {event_data.name},\n\n"
+        f"Thank you for booking a ticket for the event '{event_data.event}'. Here are your ticket details:\n\n"
+        f"Event Name: {event_data.event}\n"
+        f"Name: {event_data.name}\n"
+        f"Email: {event_data.email}\n"
+        f"Phone: {event_data.phone}\n\n"
+        "We look forward to seeing you at the event!\n\n"
+        "Best regards,\n"
+        "Event Management Team",
+        "adi20062024@gmail.com",
+        [event_data.email],
+        fail_silently=False,
+    )
     data = {
         "event":event_data,
 
@@ -111,7 +132,7 @@ def ticket_booking(request):
         except Exception as e:
             return HttpResponse(f"Error occurred: {e}")
         
-    event = Event.objects.all()
+    event = Event.objects.filter(host = 'admin')
     data ={
         'event':event,
     }

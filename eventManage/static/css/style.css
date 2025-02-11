@@ -1,5 +1,7 @@
 /* Add styles for the header */
-
+div {
+  color: rgb(3, 152, 3)
+}
 header {
   text-align: center;
   margin-bottom: 40px; /* Space below the header */
@@ -634,6 +636,7 @@ ol.alternating-colors li:nth-child(even):before {
           font-size: 0.9em;
         }
         .event strong {
+          color : black;
           display: block;
           font-size: 1em;
           font-weight: 600;
@@ -641,7 +644,7 @@ ol.alternating-colors li:nth-child(even):before {
         }
         .event p {
           margin: 0;
-          color: var(--text-color);
+          color: black;
         }
         .event-btn {
           background-color: #007bff;
@@ -716,7 +719,7 @@ button.btn-primary {
   padding: 10px;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--card-label-color);
+  color: var(--background-color);
   background-color: var(--card-hover-icon-color);
   border: none;
   border-radius: 4px;

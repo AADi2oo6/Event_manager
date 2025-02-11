@@ -1,14 +1,53 @@
 {% extends "index.html" %}
-{% block title %}Event Calander{% endblock title %}
-    {% block style %}
-    
-    
-    
-    {% endblock style %}
+{% block title %}Event Calendar{% endblock title %}
+{% block style %}
+<style>
+    .btn-secondary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #0056b3;
+    }
+    .calendar-container {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 20px;
+    }
+    .calendar-header, .calendar-day {
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+    .calendar-day {
+        min-height: 100px;
+        position: relative;
+    }
+    .event {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin-top: 5px;
+    }
+    .calendar-controls {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+</style>
+{% endblock style %}
 {% block body %}
 <div class="container">
-    <div class = "form">
-
+    <div class="form">
         <h2>Event Calendar</h2>
         <div class="form-group">
             <label for="year">Year:</label>
@@ -33,84 +72,109 @@
         </div>
         <button class="btn btn-primary" onclick="generateCalendar()">Generate Calendar</button>
     </div>
-        
 
-        <h4 id="month-year"></h4>
-        <div class="calendar-container" id="calendar">
-            <!-- Calendar Header (Days of the week) -->
-            <div class="calendar-header">Sun</div>
-            <div class="calendar-header">Mon</div>
-            <div class="calendar-header">Tue</div>
-            <div class="calendar-header">Wed</div>
-            <div class="calendar-header">Thu</div>
-            <div class="calendar-header">Fri</div>
-            <div class="calendar-header">Sat</div>
-
-            <!-- Days will be injected dynamically -->
-        </div>
+    <h4 id="month-year"></h4>
+    <div class="calendar-container" id="calendar">
+        <!-- Calendar Header (Days of the week) -->
+        <div class="calendar-header">Sun</div>
+        <div class="calendar-header">Mon</div>
+        <div class="calendar-header">Tue</div>
+        <div class="calendar-header">Wed</div>
+        <div class="calendar-header">Thu</div>
+        <div class="calendar-header">Fri</div>
+        <div class="calendar-header">Sat</div>
+        <!-- Days will be injected dynamically -->
     </div>
 
-    <script>
-        function generateCalendar() {
-            // Sample events data
-            const events = [
-                {% for i in events %}
-                    { date: '{{ i.date|escapejs }}', name: '{{ i.name|escapejs }}', description: '{{ i.description|escapejs }}' },
-                {% endfor %}
-            ];
-            const year = document.getElementById('year').value;
-            const month = document.getElementById('month').value;
-            const calendar = document.getElementById('calendar');
-            const monthYear = document.getElementById('month-year');
-            
-            // Clear previous calendar
-            calendar.innerHTML = `
-            <div class="calendar-header">Sun</div>
-            <div class="calendar-header">Mon</div>
-                <div class="calendar-header">Tue</div>
-                <div class="calendar-header">Wed</div>
-                <div class="calendar-header">Thu</div>
-                <div class="calendar-header">Fri</div>
-                <div class="calendar-header">Sat</div>
-            `;
+    <div class="calendar-controls">
+        <button class="btn btn-secondary" onclick="changeMonth(-1)">Previous Month</button>
+        <button class="btn btn-secondary" onclick="changeMonth(1)">Next Month</button>
+    </div>
+</div>
 
-            // Set month and year title
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            monthYear.innerText = `${monthNames[month]} ${year}`;
+<script>
+    function generateCalendar() {
+        // Sample events data
+        const events = [
+            {% for i in events %}
+                { date: '{{ i.date|escapejs }}', name: '{{ i.name|escapejs }}', description: '{{ i.description|escapejs }}' },
+            {% endfor %}
+        ];
+        const year = document.getElementById('year').value;
+        const month = document.getElementById('month').value;
+        const calendar = document.getElementById('calendar');
+        const monthYear = document.getElementById('month-year');
 
-            // Generate calendar for the selected month and year
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, parseInt(month) + 1, 0).getDate();
+        // Clear previous calendar
+        calendar.innerHTML = `
+        <div class="calendar-header">Sun</div>
+        <div class="calendar-header">Mon</div>
+        <div class="calendar-header">Tue</div>
+        <div class="calendar-header">Wed</div>
+        <div class="calendar-header">Thu</div>
+        <div class="calendar-header">Fri</div>
+        <div class="calendar-header">Sat</div>
+        `;
 
-            // Fill in blank days before the 1st
-            for (let i = 0; i < firstDay; i++) {
-                calendar.innerHTML += `<div class="calendar-day"></div>`;
-            }
+        // Set month and year title
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        monthYear.innerText = `${monthNames[month]} ${year}`;
 
-            // Fill in the days of the month
-            for (let day = 1; day <= daysInMonth; day++) {
-                let dayHTML = `<div class="calendar-day"><div>${day}</div>`;
+        // Generate calendar for the selected month and year
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, parseInt(month) + 1, 0).getDate();
 
-                // Add events for this day
-                events.forEach(event => {
-                    const eventDate = new Date(event.date);
-                    if (eventDate.getDate() === day && eventDate.getMonth() == month && eventDate.getFullYear() == year) {
-                        dayHTML += `
-                            <div class="event">
-                                <strong>${event.name}</strong>
-                                <p>${event.description}</p>
-                            </div>
-                        `;
-                    }
-                });
-
-                dayHTML += '</div>';
-                calendar.innerHTML += dayHTML;
-            }
+        // Fill in blank days before the 1st
+        for (let i = 0; i < firstDay; i++) {
+            calendar.innerHTML += `<div class="calendar-day"></div>`;
         }
-        
-        // Generate initial calendar
+
+        // Fill in the days of the month
+        for (let day = 1; day <= daysInMonth; day++) {
+            let dayHTML = `<div class="calendar-day"><div>${day}</div>`;
+
+            // Add events for this day
+            events.forEach(event => {
+                const eventDate = new Date(event.date);
+                if (eventDate.getDate() === day && eventDate.getMonth() == month && eventDate.getFullYear() == year) {
+                    dayHTML += `
+                        <div class="event">
+                            <strong>${event.name}</strong>
+                            <p>${event.description}</p>
+                        </div>
+                    `;
+                }
+            });
+
+            dayHTML += '</div>';
+            calendar.innerHTML += dayHTML;
+        }
+    }
+
+    function changeMonth(offset) {
+        const monthSelect = document.getElementById('month');
+        const yearInput = document.getElementById('year');
+        let month = parseInt(monthSelect.value);
+        let year = parseInt(yearInput.value);
+
+        month += offset;
+
+        if (month < 0) {
+            month = 11;
+            year -= 1;
+        } else if (month > 11) {
+            month = 0;
+            year += 1;
+        }
+
+        monthSelect.value = month;
+        yearInput.value = year;
+
         generateCalendar();
-    </script>
+    }
+
+    // Generate initial calendar
+    generateCalendar();
+</script>
 
 {% endblock body %}
