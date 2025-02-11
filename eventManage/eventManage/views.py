@@ -3,10 +3,49 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
+from userlongin.models import login
 from services.models import Event, Ticket, volunteer # Assuming you have an Event and Ticket model
-
+user = "admin"
 def index(reqeust):
     return render(reqeust,'index.html')
+
+def ulogin(request):
+    udata = login.objects.all()
+    users = {
+
+    }
+    data = {
+        'remark':"Enter the details"
+    }
+    for i in udata:
+        users.update({i.uname:i.password})
+    if request.method == 'POST':
+        # data['remark'] = "User created successfully"
+        if 'signup' in request.POST:
+            if request.POST.get('uname') in users:
+                data['remark'] = "User already exists"
+            else:
+                uname = request.POST.get('uname')
+                email = request.POST.get('email')
+                pwd = request.POST.get('pswd')
+                print(uname,email,pwd)
+                login.objects.create(uname=uname, email=email, password=pwd)
+        elif 'login' in request.POST:
+            uname = request.POST.get('uname')
+            pwd = request.POST.get('pswd')
+            global user
+            user = uname
+            
+            if pwd == login.objects.get(uname=uname).password:
+
+                data['remark'] = "User logged in successfully"
+                return redirect('/home/')  # Redirect after saving
+                print("User logged in successfully")
+            else:
+                data['remark'] = "User does not exist"
+                print("User does not exist")
+    
+    return render(request, 'login.html',data)
 
 def register_event(request):
     if request.method == 'POST':

@@ -21,7 +21,8 @@ from eventManage import views
 
 urlpatterns = [
      path('admin/', admin.site.urls),
-    path('', views.index,name = "home"),  # Ensure this is the root URL
+    path('', views.ulogin,name = "ulogin"),  # Ensure this is the root URL
+    path('home/', views.index,name = "home"),  # Ensure this is the root URL
     path("index/",views.index),
     path('calendar/', views.event_calendar, name='event_calendar'),
     path('list/', views.events_list, name='events_list'),
