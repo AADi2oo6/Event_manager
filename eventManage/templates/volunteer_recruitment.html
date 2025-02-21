@@ -6,42 +6,87 @@
     <title>Volunteer Recruitment</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     {% load widget_tweaks %}
+    <style>
+        /* Dark Theme Styles */
+        body {
+            background-color: #121212;
+            color: #90eeb6;
+            font-family: Arial, sans-serif;
+        }
+        
+        .form-container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .form-control {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+        .form-control:focus {
+            background-color: #333;
+            color: #ffffff;
+            border-color: #777;
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background-color:rgb(152, 156, 161);
+            border-color:rgb(120, 127, 133);
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background-color:rgb(33, 255, 144);
+            border-color:rgb(45, 255, 168);
+        }
+
+        .list-group-item {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-color: #444;
+        }
+
+        h2, h4 {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <h2 class="text-center">Volunteer Recruitment</h2>
+    <div class="container mt-5">
+        <h2>Volunteer Recruitment</h2>
         <p class="text-center">Join us as a volunteer for our upcoming events!</p>
 
-        <!-- Volunteer Recruitment Form -->
-        <form method="POST" action="">
-            {% csrf_token %}
-
-            <!-- Display form errors -->
-
-            <div class="form-group">
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" class="form-control" required>
-            </div>
-            <div class="form-group">
-            <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-            <div class="form-group">
-            <label for="event">Select Event to Volunteer For:</label>
-            <select class="form-control" id="event" name="event" required>
-                {% for i in event %}
-                <option value="{{ i.name }}">{{ i.name }}</option>
-                {% endfor %}
-            </select>
-            </div>
-            <div class="col">
-                <button type="submit" id='submit' value='submit' class="btn btn-primary btn-block">Sign Up as Volunteer</button>
-            </div>
+        <!-- Form Box with Shadow -->
+        <div class="form-container">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="event">Select Event to Volunteer For:</label>
+                    <select class="form-control" id="event" name="event" required>
+                        {% for i in event %}
+                        <option value="{{ i.name }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Apply for Volunteer</button>
+            </form>
         </div>
-    </form>
-    
-    <hr>
-    
+
+        <hr>
+
         <h4 class="mt-4">Current Volunteers</h4>
         <ul class="list-group mt-2">
             {% for volunteer in volunteers %}

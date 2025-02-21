@@ -1,17 +1,49 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticket Booking Success</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .success-card {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 255, 128, 0.5);
+            text-align: center;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.8);
+        }
+        h2 {
+            color: #00ff7f;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <h2>Ticket Booking Successful!</h2>
-        <p>Thank you {{ event.name }} for booking tickets for the event: {{ event.event }}.</p>
-        <h3>You will recieve your tickets on your email: {{ event.email }} </h3>
-        <a href="/home/" class="btn btn-primary">Back to Home</a>
+    <div class="success-card">
+        <h2>🎉 Ticket Booking Successful! 🎉</h2>
+        <p>Thank you <strong>{{ event.name }}</strong> for booking tickets for the event: <strong>{{ event.event }}</strong>.</p>
+        <h3>You will receive your tickets on your email: <strong>{{ event.email }}</strong></h3>
+        <a href="/home/" class="btn btn-custom mt-3">Back to Home</a>
     </div>
 </body>
 </html>

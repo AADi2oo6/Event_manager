@@ -3,37 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer Registration Success</title>
+    <title>Thank You for Volunteering</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        /* Dark Theme Styles */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        
+        .form-container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .form-control {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+        .form-control:focus {
+            background-color: #333;
+            color: #ffffff;
+            border-color: #777;
+            box-shadow: none;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            transition: 0.3s;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004a9f;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container mt-5">
         <h2>Thank You for Volunteering!</h2>
-        <p>Your registration has been successful. We look forward to seeing you at the event!</p>
-        
-        <!-- Feedback Form -->
-        <h4>We value your feedback</h4>
-        <form method="POST" action="">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="rating">Rate Your Registration Experience:</label>
-                <select class="form-control" id="rating" name="rating" required>
-                    <option value="5">Excellent</option>
-                    <option value="4">Good</option>
-                    <option value="3">Average</option>
-                    <option value="2">Poor</option>
-                    <option value="1">Very Poor</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="comments">Additional Comments:</label>
-                <textarea class="form-control" id="comments" name="comments" rows="4" placeholder="Share your thoughts here..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-success">Submit Feedback</button>
-        </form>
+        <p class="text-center">Your registration has been successful. We look forward to seeing you at the event!</p>
 
-        <hr>
-        <a href="{% url 'volunteer_recruitment' %}" class="btn btn-primary">Go Back to Volunteer Recruitment</a>
+        <!-- Feedback Form Box -->
+        <div class="form-container">
+            <h4>We value your feedback</h4>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="rating">Rate Your Registration Experience:</label>
+                    <select id="rating" name="rating" class="form-control">
+                        <option>Excellent</option>
+                        <option>Good</option>
+                        <option>Average</option>
+                        <option>Poor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Additional Comments:</label>
+                    <textarea id="comments" name="comments" class="form-control" rows="4" placeholder="Share your thoughts here..."></textarea>
+                </div>
+
+                <!-- Buttons Container -->
+                <div class="button-container">
+                    <button type="submit" class="btn btn-success">Submit Feedback</button>
+                    <a href="/volunteer_recruitment/" class="btn btn-primary">Go Back to Volunteer Recruitment</a>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

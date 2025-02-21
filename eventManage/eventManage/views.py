@@ -37,6 +37,8 @@ def ulogin(request):
             pwd = request.POST.get('pswd')
 
             if uname in users and users[uname] == pwd:
+                global user
+                user = uname
                 return redirect('/home/')  # Redirect after successful login
             else:
                 data['message'] = "Invalid username or password!"
@@ -58,7 +60,8 @@ def register_event(request):
 
 def event_calendar(request):
     # You may want to pass actual events data here
-    events = Event.objects.all().order_by('date')
+
+    events = Event.objects.filter(host__in=[user, 'admin']).order_by('date')
 
     return render(request, 'event_calendar.html', {'events': events})
 
@@ -76,7 +79,7 @@ def register(request):
 
 def schedule(request):
     current_date = timezone.now().date()
-    events = Event.objects.filter(date__gt=current_date).order_by('date')
+    events = Event.objects.filter(date__gt=current_date, host__in=[user, 'admin']).order_by('date')
     return render(request, 'events_list.html', {'events': events})
 
 def ticket_booking_success(request,name):
@@ -127,7 +130,7 @@ def ticket_booking(request):
     return render(request, 'ticket_booking.html',data)
 
 def volunteer_recruitment(request):
-    event = Event.objects.all()
+    event = Event.objects.filter(host='admin')
     vdata = volunteer.objects.all()
     data ={
         'event':event,
@@ -137,7 +140,6 @@ def volunteer_recruitment(request):
         try:
             name = request.POST.get('name')
             event1 = request.POST.get('event')
-            print(name,event1,"thedafata======================================")
             # Save volunteer details in the database (using the Volunteer model)
             en = volunteer(name=name, event=event1)
             en.save()
