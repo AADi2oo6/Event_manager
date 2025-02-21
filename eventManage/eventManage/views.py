@@ -1,13 +1,12 @@
-from django.http import HttpResponse , HttpResponseRedirect
-from django.shortcuts import render
-from django.shortcuts import render, redirect
-
+# from django.http import HttpResponse , HttpResponseRedirect
 from django.http import HttpResponse
-from userlongin.models import login
+from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.core.mail import send_mail
+
+from userlongin.models import login
 from services.models import Event, Ticket, volunteer # Assuming you have an Event and Ticket model
 
-from django.core.mail import send_mail
 
 
 user = "admin"
@@ -15,44 +14,35 @@ def index(reqeust):
     return render(reqeust,'index.html')
 
 def ulogin(request):
-
     udata = login.objects.all()
-    users = {
+    users = {i.uname: i.password for i in udata}
+    data = {"message": "", "message_type": ""}
 
-    }
-    data = {
-        'remark':"Enter the details"
-    }
-    for i in udata:
-        users.update({i.uname:i.password})
     if request.method == 'POST':
-        # data['remark'] = "User created successfully"
         if 'signup' in request.POST:
-            if request.POST.get('uname') in users:
-                data['remark'] = "User already exists"
+            uname = request.POST.get('uname')
+            email = request.POST.get('email')
+            pwd = request.POST.get('pswd')
+
+            if uname in users:
+                data['message'] = "User already exists!"
+                data['message_type'] = "warning"
             else:
-                uname = request.POST.get('uname')
-                email = request.POST.get('email')
-                pwd = request.POST.get('pswd')
-                print(uname,email,pwd)
                 login.objects.create(uname=uname, email=email, password=pwd)
+                data['message'] = "User registered successfully!"
+                data['message_type'] = "success"
+
         elif 'login' in request.POST:
             uname = request.POST.get('uname')
             pwd = request.POST.get('pswd')
-            global user
-            user = uname
-            
-            if pwd == login.objects.get(uname=uname).password:
 
-                data['remark'] = "User logged in successfully"
-                return redirect('/home/')  # Redirect after saving
-                print("User logged in successfully")
+            if uname in users and users[uname] == pwd:
+                return redirect('/home/')  # Redirect after successful login
             else:
-                data['remark'] = "User does not exist"
-                print("User does not exist")
-    
-    return render(request, 'login.html',data)
+                data['message'] = "Invalid username or password!"
+                data['message_type'] = "danger"
 
+    return render(request, 'login.html', data)
 def register_event(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -77,8 +67,6 @@ def events_list(request):
     events = Event.objects.all()
     return render(request, 'events_list.html', {'events': events})
 
-def home(request):
-    return render(request, 'home.html')
 
 def register_success(request):
     return render(request, 'register_success.html')

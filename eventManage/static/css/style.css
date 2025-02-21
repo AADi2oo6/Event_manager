@@ -609,7 +609,7 @@ ol.alternating-colors li:nth-child(even):before {
         }
         .calendar-header {
           font-weight: bold;
-          background-color: #4CAF50;
+          background-color: #34d399;
           color: white;
           padding: 10px;
           border-radius: 5px;

@@ -70,7 +70,7 @@
                 <option value="11">December</option>
             </select>
         </div>
-        <button class="btn btn-primary" onclick="generateCalendar()">Generate Calendar</button>
+        <button class="btn btn-primary" onclick="generateCalendar()">See Calendar</button>
     </div>
 
     <h4 id="month-year"></h4>
@@ -94,7 +94,7 @@
 
 <script>
     function generateCalendar() {
-        // Sample events data
+        // events data
         const events = [
             {% for i in events %}
                 { date: '{{ i.date|escapejs }}', name: '{{ i.name|escapejs }}', description: '{{ i.description|escapejs }}' },
