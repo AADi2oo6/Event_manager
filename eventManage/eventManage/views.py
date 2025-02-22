@@ -85,21 +85,7 @@ def schedule(request):
 def ticket_booking_success(request,name):
     try:
         event_data = Ticket.objects.filter(name=name).first()
-        send_mail(
-            f"Your Ticket For the Event {event_data.event}",
-            f"Dear {event_data.name},\n\n"
-            f"Thank you for booking a ticket for the event '{event_data.event}'. Here are your ticket details:\n\n"
-            f"Event Name: {event_data.event}\n"
-            f"Name: {event_data.name}\n"
-            f"Email: {event_data.email}\n"
-            f"Phone: {event_data.phone}\n\n"
-            "We look forward to seeing you at the event!\n\n"
-            "Best regards,\n"
-            "Event Management Team",
-            "adi20062024@gmail.com",
-            [event_data.email],
-            fail_silently=False,
-        )
+        # event_data = login.objects.get(name=user)
     except Exception as e:
         return HttpResponse(f"Error occurred: {e}")
 
@@ -121,7 +107,21 @@ def ticket_booking(request):
 
                 # Save ticket details in the database (using the Ticket model)
                 Ticket.objects.create(name=name, event = event,email=email, phone=phone)
-
+                send_mail(
+                    f"Your Ticket For the Event {event}",
+                    f"Dear {name},\n\n"
+                    f"Thank you for booking a ticket for the event '{event}'. Here are your ticket details:\n\n"
+                    f"Event Name: {event}\n"
+                    f"Name: {name}\n"
+                    f"Email: {email}\n"
+                    f"Phone: {phone}\n\n"
+                    "We look forward to seeing you at the event!\n\n"
+                    "Best regards,\n"
+                    "Event Management Team",
+                    "adi20062024@gmail.com",
+                    [email],
+                    fail_silently=False,
+                )
             # Redirect to the success page
             return redirect(f'/ticket_booking_success/{name}')
         except Exception as e:
