@@ -83,22 +83,26 @@ def schedule(request):
     return render(request, 'events_list.html', {'events': events})
 
 def ticket_booking_success(request,name):
-    event_data = Ticket.objects.get(name=name)
-    send_mail(
-        f"Your Ticket For the Event {event_data.event}",
-        f"Dear {event_data.name},\n\n"
-        f"Thank you for booking a ticket for the event '{event_data.event}'. Here are your ticket details:\n\n"
-        f"Event Name: {event_data.event}\n"
-        f"Name: {event_data.name}\n"
-        f"Email: {event_data.email}\n"
-        f"Phone: {event_data.phone}\n\n"
-        "We look forward to seeing you at the event!\n\n"
-        "Best regards,\n"
-        "Event Management Team",
-        "adi20062024@gmail.com",
-        [event_data.email],
-        fail_silently=False,
-    )
+    try:
+        event_data = Ticket.objects.filter(name=name).first()
+        send_mail(
+            f"Your Ticket For the Event {event_data.event}",
+            f"Dear {event_data.name},\n\n"
+            f"Thank you for booking a ticket for the event '{event_data.event}'. Here are your ticket details:\n\n"
+            f"Event Name: {event_data.event}\n"
+            f"Name: {event_data.name}\n"
+            f"Email: {event_data.email}\n"
+            f"Phone: {event_data.phone}\n\n"
+            "We look forward to seeing you at the event!\n\n"
+            "Best regards,\n"
+            "Event Management Team",
+            "adi20062024@gmail.com",
+            [event_data.email],
+            fail_silently=False,
+        )
+    except Exception as e:
+        return HttpResponse(f"Error occurred: {e}")
+
     data = {
         "event":event_data,
 
